@@ -74,8 +74,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex h-[60px] shrink-0 items-center gap-2.5 border-b border-ink-100 px-4">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-500 text-[13px] font-bold text-white">A</div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-[13px] font-semibold text-ink-900">Agent 协作工作区</div>
-            <div className="text-[10px] text-ink-400">同一任务，同一上下文</div>
+            <div className="truncate text-[13px] font-semibold text-ink-900">智能体圆桌</div>
+            <div className="text-[10px] text-ink-400">同一张桌子，同一个上下文</div>
           </div>
           <button className="text-ink-400 lg:hidden" onClick={() => setMobileNav(false)} aria-label="关闭导航"><X size={16} /></button>
         </div>

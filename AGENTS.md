@@ -1,5 +1,6 @@
 # AGENTS.md — 给 AI 编程助手的本地部署与补全指南
 
+> 项目：**智能体圆桌 Agent Roundtable** —— 在本机运行的多 Agent 协作工作台。
 > 本文件是写给 **AI 编程助手**（Claude Code / Cursor / Copilot / Codex / Cline 等）执行的操作手册。
 > 人类用户请读 [README.md](./README.md)。
 > 你的任务：把本项目在**用户自己的电脑上**跑起来，让用户用自己的模型 API Key 工作，全程不把数据或密钥发到任何第三方服务器。
