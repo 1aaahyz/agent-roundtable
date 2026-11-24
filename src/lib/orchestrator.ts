@@ -1,6 +1,6 @@
 import { getDb, persist } from "./db";
 import { publish } from "./events";
-import { assertSafeEndpoint, decryptCredential, redact } from "./security";
+import { assertSafeEndpoint, decryptCredential, providerFallbackKey, redact } from "./security";
 import { canTransitionTask } from "./state-machines";
 import type { AgentConnection, Message, Run, Task } from "./types";
 import { newId, now } from "./utils";
@@ -68,7 +68,7 @@ async function modelText(agent: AgentConnection, task: Task, run: Run): Promise<
     };
   }
   const db = await getDb();
-  const key = decryptCredential(db.credentials[agent.id] ?? "") || process.env.ARK_API_KEY;
+  const key = decryptCredential(db.credentials[agent.id] ?? "") || providerFallbackKey(agent.endpoint);
   if (!key) throw Object.assign(new Error("未配置模型密钥，真实调用未执行"), { code: "MODEL_KEY_MISSING" });
   const base = assertSafeEndpoint(agent.endpoint).toString().replace(/\/+$/, "");
   const url = base.endsWith("/chat/completions") ? base : `${base}/chat/completions`;

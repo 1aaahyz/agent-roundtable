@@ -88,6 +88,22 @@ export function decryptCredential(payload: string): string | null {
   }
 }
 
+/**
+ * Server-side fallback credential, restricted to the Volcengine Ark endpoint.
+ * `ARK_API_KEY` belongs to Ark; sending it to another provider yields a misleading
+ * 401 that looks like "user's key is wrong". Return null for any other host.
+ */
+export function providerFallbackKey(endpoint: string): string | null {
+  const key = process.env.ARK_API_KEY;
+  if (!key) return null;
+  try {
+    const host = new URL(endpoint).hostname.toLowerCase();
+    return host === "volces.com" || host.endsWith(".volces.com") ? key : null;
+  } catch {
+    return null;
+  }
+}
+
 export function redact(text: string): string {
   return text
     .replace(/Authorization:\s*Bearer\s+[^\s"']+/gi, "Authorization: Bearer <redacted>")

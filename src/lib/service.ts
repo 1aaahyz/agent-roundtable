@@ -2,7 +2,7 @@ import { getDb, persist } from "./db";
 import { publish } from "./events";
 import { kickRun } from "./orchestrator";
 import { createSession, destroySession, getSessionUser, hashPassword, hashToken, readCookie, sessionCookieHeader, clearCookieHeader, SESSION_COOKIE, verifyPassword } from "./auth";
-import { assertSafeEndpoint, credentialFingerprint, encryptCredential, decryptCredential, redact, validateFileName, MAX_MATERIAL_BYTES } from "./security";
+import { assertSafeEndpoint, credentialFingerprint, encryptCredential, decryptCredential, providerFallbackKey, redact, validateFileName, MAX_MATERIAL_BYTES } from "./security";
 import { canTransitionTask } from "./state-machines";
 import { ApiError, type AgentConnection, type Approval, type Artifact, type Database, type Message, type Run, type Task } from "./types";
 import { defaultSettings } from "./seed";
@@ -708,7 +708,7 @@ export async function dispatch(ctx: Ctx): Promise<ApiResult> {
     if (s[2] === "test" && method === "POST") {
       const isModel = agent.adapterType === "model_api";
       const isMock = isModel && agent.endpoint === "local://mock-openai";
-      const secret = isModel ? (decryptCredential(db.credentials[agent.id] ?? "") || process.env.ARK_API_KEY) : null;
+      const secret = isModel ? (decryptCredential(db.credentials[agent.id] ?? "") || providerFallbackKey(agent.endpoint)) : null;
       const hasKey = Boolean(secret);
       let remote: { ok: boolean; detail: string; models?: string[] } | null = null;
       if (isModel && !isMock && hasKey && body.probe !== false) {
